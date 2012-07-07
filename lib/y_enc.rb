@@ -1,7 +1,8 @@
 class YEnc
 
-  def initialize filepath
+  def initialize filepath, outputpath
     @filepath = filepath
+    @outputpath = outputpath
     puts "Searching for file: #{@filepath}"
   end
 
@@ -13,9 +14,27 @@ class YEnc
         f.any? do |line|
           if line.include?("=ybegin") #This is the begin size
             breakdown_header line
+            next
           end
           #end of reading lines
           #Decode and write to binary file
+          newFile = File.new(@filename, "w")
+          escape = false
+
+          line.each_byte do |c|
+            if c == 61 #escape character hit goto the next one
+              escape = true
+              next
+            elsif escape
+              escape = false
+              decoded = c - 64
+            else
+              decoded = c - 42
+            end
+            newFile.putc decoded
+          end
+          #done writing close the file
+          newFile.close
         end
       end
     else
@@ -23,7 +42,6 @@ class YEnc
     end
   end
 
-  #EVERYTHING AFTER THIS IS PRIVATE
   private
 
   def is_yenc?
