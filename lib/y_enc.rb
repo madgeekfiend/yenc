@@ -14,7 +14,6 @@ class YEnc
 
       File.open(@filepath, 'r').each_line do |line|
 
-          puts "BEGIN_READ #{begin_read}"
           if line.include?("=ybegin") #This is the begin size
             breakdown_header line
             begin_read = true
@@ -22,29 +21,33 @@ class YEnc
           end
           if line.include?("=yend")
             puts "Reached the end of file"
+            begin_read=false
             break #stop looking through the file we are done
           end
           #end of reading lines
 
           if begin_read
-            puts "Line count #{line.length}"
+            #puts "LINE COUNT: #{line.length}"
             #Decode and write to binary file
             esc = false
             line.each_byte do |c|
-              if c == 61 #escape character hit goto the next one
+              next if c == 13 or c == 10
+
+              if c == 61 and not esc #escape character hit goto the next one
                 esc = true
                 next
-              elsif esc
-                esc = false
-                decoded = c - 64
               else
-                decoded = c - 42
-              end
+                if esc
+                  esc = false
+                  c = c - 64
+                end
 
-              if decoded.between?(0,41)
-                decoded = decoded + 214
+                if c.between?(0,41)
+                  decoded = c + 214
+                else
+                  decoded = c - 42
+                end
               end
-              #if decoded is 0 - 41 add 214
               @new_file.putc decoded
             end
           end
