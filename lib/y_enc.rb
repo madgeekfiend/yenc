@@ -1,15 +1,15 @@
+require 'zlib'
+
 class YEnc
 
   def initialize filepath, outputpath
     @filepath = filepath
     @outputpath = outputpath
-    puts "Searching for file: #{@filepath}"
   end
 
   def decode
     if is_yenc?
             #Continue decoding
-      puts "File is verified as yEncoded file. Beginning decoding."
       begin_read = false
 
       File.open(@filepath, 'r').each_line do |line|
@@ -20,7 +20,6 @@ class YEnc
             next
           end
           if line.include?("=yend")
-            puts "Reached the end of file"
             begin_read=false
             break #stop looking through the file we are done
           end
@@ -55,8 +54,13 @@ class YEnc
       end
       @new_file.close
     else
-      puts "This is not a yEncoded file."
+      false
     end
+  end
+
+  #Does this pass the crc32 check
+  def pass_crc32?
+
   end
 
   private
@@ -65,17 +69,15 @@ class YEnc
     File.read(@filepath).include?("=ybegin")
   end
 
+  def breakdown_endline line
+    @crc32 = line[/crc32=(.*)/,1] if @crc32.nil?
+  end
+
   def breakdown_header line
     @filename=line[/name=(.*)/,1] if @filename.nil?
     @filesize =line[/size=([^\s]+)/,1] if @filesize.nil?
     @line=line[/line=([^\s]+)/,1] if @line.nil?
-    puts "File Name: #{@filename}"
-    puts "Size: #{@filesize} Length: #{@line}"
-    puts "Creating file: #{@outputpath}#{@filename}"
     @new_file = File.new(@outputpath + @filename, "wb")
   end
 
 end
-
-y = YEnc.new("/Users/scontapay/yenc.txt", "/Users/scontapay/")
-y.decode
