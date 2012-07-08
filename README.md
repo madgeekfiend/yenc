@@ -17,12 +17,12 @@ yEnc is NOT an audio format (as MP3) or a video format (as AVI, MOV,...) or a pi
 
 This gem currently only supports decoding a single yEnc file. You can decode your yenc file by doing this.
 
-'''
+```
 require 'yEnc'
 
 y = YEnc.new( full_path_to_yenc_text_file, path_to_output_binary_to )
 y.decode
-'''
+```
 
 This will decode the yEnc ASCII text file to a binary file in the output path directory.
 
