@@ -20,6 +20,7 @@ class YEnc
             next
           end
           if line.include?("=yend")
+            breakdown_endline line
             begin_read=false
             break #stop looking through the file we are done
           end
@@ -60,7 +61,10 @@ class YEnc
 
   #Does this pass the crc32 check
   def pass_crc32?
-
+    f = nil
+    File.open(@outputpath + @filename, "rb") { |h| f = h.read }
+    crc32 = Zlib.crc32(f,0).to_s(16)
+    crc32.eql?(@crc32.downcase.strip)
   end
 
   private
@@ -81,3 +85,6 @@ class YEnc
   end
 
 end
+
+#y = YEnc.new("/Users/scontapay/yenc.txt", "/Users/scontapay/")
+#y.decode
