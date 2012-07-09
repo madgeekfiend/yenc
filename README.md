@@ -31,7 +31,7 @@ If you want to encode a file. This gem currently does not support multipart enco
 ```
 require 'yEnc'
 
-y = YEnc.new( full_path_to_yenc_text_file, path_to_output_binary_to )
+y = YEnc.new( full_path_to_binary_to_encode, path_to_output_encoded_ascii_file )
 y.encode_to_file "encoded.txt"
 ```
 
