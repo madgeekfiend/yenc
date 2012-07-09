@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name        = 'yEnc'
-  s.version     = '0.0.27'
+  s.version     = '0.0.28'
   s.date        = '2012-07-08'
   s.summary     = "yEnc"
   s.description = "yEnc decoder written in Ruby"

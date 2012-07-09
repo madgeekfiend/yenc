@@ -30,6 +30,17 @@ If you want to check if the generated binary has the expected crc32 signature fr
 
     y.pass_crc32?
 
+# Getters
+
+You can retrieve internal class data for these attributes
+
+* filepath
+* outputpath
+* filename
+* filesize
+* line
+* crc32
+
 # History
 
 * 0.0.27 - Cleaned up and removed puts calls and added pass_crc32? call

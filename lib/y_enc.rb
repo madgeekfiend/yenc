@@ -2,9 +2,15 @@ require 'zlib'
 
 class YEnc
 
+  attr_reader :filepath, :outputpath, :filename, :filesize, :line
+
   def initialize filepath, outputpath
     @filepath = filepath
     @outputpath = outputpath
+  end
+
+  def crc32
+    @crc32.upcase.strip
   end
 
   def decode
@@ -85,6 +91,3 @@ class YEnc
   end
 
 end
-
-#y = YEnc.new("/Users/scontapay/yenc.txt", "/Users/scontapay/")
-#y.decode
