@@ -1,5 +1,9 @@
 require 'zlib'
 
+# yEnc
+#
+# This gem allows you to decode and encode files using the yenc standard.
+
 class YEnc
 
   attr_reader :filepath, :outputpath, :filename, :filesize, :line
@@ -11,6 +15,29 @@ class YEnc
 
   def crc32
     @crc32.upcase.strip
+  end
+
+  # Encode file into a yenc text file
+  def encode_to_file outputfilename
+    outputfile = File.new(@outputpath + outputfilename, "w")
+    outputfile.puts "=ybegin size=#{File.size?(@filepath)} line=128 name=#{File.basename @filepath}\n"
+    File.open(@filepath,'rb') do |f|
+      until f.eof?
+        #Read in 128 bytes at a time
+        buffer = f.read(128)
+        buffer.each_byte do |byte|
+          char_to_write = (byte + 42) % 256
+          if [0, 10, 13, 61].include?(char_to_write)
+            outputfile.putc '='
+            char_to_write = (char_to_write + 64) % 256
+          end
+          outputfile.putc char_to_write
+        end
+        outputfile.puts "\n"
+      end
+    end
+    outputfile.puts "=yend size=312860 crc32=#{file_crc32(@filepath).upcase}\n"
+    outputfile.close
   end
 
   def decode
@@ -67,10 +94,15 @@ class YEnc
 
   #Does this pass the crc32 check
   def pass_crc32?
-    f = nil
-    File.open(@outputpath + @filename, "rb") { |h| f = h.read }
-    crc32 = Zlib.crc32(f,0).to_s(16)
+    crc32 = file_crc32 @outputpath + @filename
     crc32.eql?(@crc32.downcase.strip)
+  end
+
+  # Get the CRC32 for a file
+  def file_crc32 filepath
+    f = nil
+    File.open( filepath, "rb") { |h| f = h.read }
+    Zlib.crc32(f,0).to_s(16)
   end
 
   private
