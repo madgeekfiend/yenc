@@ -60,4 +60,4 @@ You can retrieve internal class data for these attributes
 
 # Contributors
 
-tdobrovolskij https://github.com/tdobrovolskij
+**tdobrovolskij** https://github.com/tdobrovolskij
