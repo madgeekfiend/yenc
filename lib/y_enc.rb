@@ -40,6 +40,29 @@ class YEnc
     outputfile.close
   end
 
+  # method only encodes given file and returns yenc encoded string; nothing more, nothing less
+  # Author: Tadeus Dobrovolskij
+  def encode
+    sio = StringIO.new("","w:ASCII-8BIT")
+    File.open(@filepath,'rb') do |b|
+      until b.eof?
+        buffer = b.read(128)
+        buffer.each_byte do |byte|
+          char_to_write = (byte + 42) % 256
+          if [0, 10, 13, 61].include?(char_to_write)
+            sio.putc '='
+            char_to_write = (char_to_write + 64) % 256
+          end
+          sio.putc char_to_write
+        end
+        sio.puts "\n"
+      end
+    end
+    result = sio.string
+    sio.close
+    return result
+  end
+
   def decode
     if is_yenc?
             #Continue decoding
