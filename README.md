@@ -52,8 +52,12 @@ You can retrieve internal class data for these attributes
 
 # History
 
+* 0.0.30 - Added Added "encode" function which provides us with encoded string [tdobrovolskij]
 * 0.0.29 - Implemented first encoder to encode from binary to yEnc file
 * 0.0.27 - Cleaned up and removed puts calls and added pass_crc32? call
 * 0.0.25 - First release with working decoder
 * 0.0.20 - Initial commit to ruby gems not even working
 
+# Contributors
+
+tdobrovolskij https://github.com/tdobrovolskij
