@@ -21,13 +21,14 @@ class YEnc
   def encode_to_file outputfilename
     outputfile = File.new(@outputpath + outputfilename, "w")
     outputfile.puts "=ybegin size=#{File.size?(@filepath)} line=128 name=#{File.basename @filepath}\n"
+    special = { 0 => nil, 10 => nil, 13 => nil, 61 => nil }
     File.open(@filepath,'rb') do |f|
       until f.eof?
         #Read in 128 bytes at a time
         buffer = f.read(128)
         buffer.each_byte do |byte|
           char_to_write = (byte + 42) % 256
-          if [0, 10, 13, 61].include?(char_to_write)
+          if special.has_key?(char_to_write)
             outputfile.putc '='
             char_to_write = (char_to_write + 64) % 256
           end
@@ -44,12 +45,13 @@ class YEnc
   # Author: Tadeus Dobrovolskij
   def encode
     sio = StringIO.new("","w:ASCII-8BIT")
+    special = { 0 => nil, 10 => nil, 13 => nil, 61 => nil }
     File.open(@filepath,'rb') do |b|
       until b.eof?
         buffer = b.read(128)
         buffer.each_byte do |byte|
           char_to_write = (byte + 42) % 256
-          if [0, 10, 13, 61].include?(char_to_write)
+          if special.has_key?(char_to_write)
             sio.putc '='
             char_to_write = (char_to_write + 64) % 256
           end
