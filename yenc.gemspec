@@ -1,7 +1,7 @@
 Gem::Specification.new do |s|
   s.name        = 'yEnc'
-  s.version     = '0.0.31'
-  s.date        = '2013-11-08'
+  s.version     = '0.0.32'
+  s.date        = '2013-11-17'
   s.summary     = "yEnc"
   s.description = "yEnc decoder written in Ruby"
   s.authors     = ["Sam Contapay","Tadeus Dobrovolskij"]
